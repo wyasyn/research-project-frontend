@@ -68,7 +68,7 @@ export function OrganizationForm({ onSubmit }: OrganizationFormProps) {
               <FormItem>
                 <FormLabel>Organization Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Acme Inc." {...field} />
+                  <Input placeholder="Company Name." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

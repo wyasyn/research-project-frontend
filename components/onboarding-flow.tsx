@@ -35,12 +35,13 @@ export default function OnboardingFlow() {
   const handleOrganizationSubmit = async (data: Organization) => {
     try {
       // Send organization data to API
-      const response = await fetch(`${backendUrl}/organizations`, {
+      const response = await fetch(`${backendUrl}/organizations/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
+        mode: "cors",
       });
 
       if (!response.ok) {
@@ -48,8 +49,15 @@ export default function OnboardingFlow() {
         return;
       }
 
-      const result = await response.json();
-      setOrganization({ ...data, id: result.organization_id });
+      const { message, organization, error } = await response.json();
+      if (error) {
+        toast.error(error);
+        return;
+      }
+      if (message) {
+        toast.success(message);
+      }
+      setOrganization({ ...data, id: organization.id });
       setStep(2);
     } catch (error) {
       console.error("Error creating organization:", error);
@@ -101,10 +109,10 @@ export default function OnboardingFlow() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 p-8 mx-auto">
       <Steps currentStep={step} />
 
-      <Card>
+      <Card className="border-none">
         <CardContent className="pt-6">
           {step === 1 && (
             <OrganizationForm onSubmit={handleOrganizationSubmit} />

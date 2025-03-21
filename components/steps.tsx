@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils";
 import { CheckIcon } from "lucide-react";
+import { Button } from "./ui/button";
 
 interface StepsProps {
   currentStep: number;
@@ -15,46 +15,28 @@ export function Steps({ currentStep }: StepsProps) {
 
   return (
     <nav aria-label="Progress">
-      <ol role="list" className="flex items-center">
-        {steps.map((step, stepIdx) => (
-          <li
-            key={step.name}
-            className={`relative flex-1 ${
-              stepIdx !== steps.length - 1 ? "pr-8 sm:pr-20" : ""
-            }`}
-          >
-            <div
-              aria-hidden="true"
-              className={cn(
-                "absolute inset-0 flex items-center",
-                stepIdx === steps.length - 1 ? "hidden" : "flex"
-              )}
-            >
-              <div
-                className={`h-0.5 w-full ${
-                  stepIdx < currentStep - 1 ? "bg-primary" : "bg-muted"
-                }`}
-              />
-            </div>
-            <div
-              className={`relative flex h-8 w-8 items-center justify-center rounded-full ${
-                step.id < currentStep
-                  ? "bg-primary text-primary-foreground"
-                  : step.id === currentStep
-                  ? "border-2 border-primary bg-background"
-                  : "border-2 border-muted bg-background"
-              }`}
+      <ol role="list" className="flex items-center gap-4 justify-between">
+        {steps.map((step) => (
+          <li key={step.name} className="flex items-center gap-2">
+            <Button
+              size={"icon"}
+              className={
+                step.id === currentStep
+                  ? "bg-primary text-white"
+                  : step.id < currentStep
+                  ? "bg-primary/35 text-primary"
+                  : "bg-background text-muted-foreground"
+              }
             >
               {step.id < currentStep ? (
-                <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                <CheckIcon size={16} />
               ) : (
-                <span className="text-sm font-semibold">{step.id}</span>
+                <span>{step.id}</span>
               )}
-              <span className="sr-only">{step.name}</span>
-            </div>
-            <div className="mt-2 text-center text-sm font-medium">
-              {step.name}
-            </div>
+            </Button>
+            {step.id === currentStep && (
+              <span className="text-xs">{step.name}</span>
+            )}
           </li>
         ))}
       </ol>

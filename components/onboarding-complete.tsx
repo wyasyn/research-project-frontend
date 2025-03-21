@@ -2,6 +2,7 @@
 import { CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Organization, Admin } from "@/components/onboarding-flow";
+import Link from "next/link";
 
 interface OnboardingCompleteProps {
   organization: Organization | null;
@@ -38,7 +39,7 @@ export function OnboardingComplete({
           </div>
 
           <div>
-            <h3 className="font-medium">Admin Account</h3>
+            <h3 className="font-medium mb-3">Admin Account</h3>
             <div className="flex items-center gap-3">
               {admin?.image_url && (
                 <div className="h-10 w-10 overflow-hidden rounded-full">
@@ -51,14 +52,16 @@ export function OnboardingComplete({
               )}
               <div>
                 <p className="text-sm font-medium">{admin?.name}</p>
-                <p className="text-sm text-muted-foreground">{admin?.email}</p>
+                <p className="text-xs text-muted-foreground">{admin?.email}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <Button className="w-full max-w-md">Go to Dashboard</Button>
+      <Button className="w-full max-w-md" asChild>
+        <Link href={"/dashboard"}>Go to Dashboard</Link>
+      </Button>
     </div>
   );
 }
