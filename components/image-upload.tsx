@@ -10,6 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ImageIcon, CameraIcon, UploadIcon } from "lucide-react";
 import Webcam from "react-webcam";
 import imageCompression from "browser-image-compression";
+import { uploadImage } from "@/lib/actions/image_action";
 
 interface ImageUploadProps {
   onSubmit: (imageUrl: string) => void;
@@ -41,24 +42,15 @@ export function ImageUpload({ onSubmit }: ImageUploadProps) {
       });
 
       // Upload to Cloudinary
-      const formData = new FormData();
-      formData.append("file", compressedFile);
-      formData.append("upload_preset", "onboarding_images");
 
-      const response = await fetch(
-        "https://api.cloudinary.com/v1_1/your-cloud-name/image/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to upload image");
+      const { imageUrl, error } = await uploadImage(compressedFile);
+      if (error) {
+        setError("Failed to upload image");
+        return;
       }
-
-      const data = await response.json();
-      setImage(data.secure_url);
+      if (imageUrl) {
+        setImage(imageUrl);
+      }
     } catch (err) {
       console.error("Error uploading image:", err);
       setError("Failed to upload image. Please try again.");
@@ -77,7 +69,8 @@ export function ImageUpload({ onSubmit }: ImageUploadProps) {
       // Capture image from webcam
       const imageSrc = webcamRef.current.getScreenshot();
       if (!imageSrc) {
-        throw new Error("Failed to capture image");
+        setError("Failed to capture image");
+        return;
       }
 
       // Convert base64 to blob
@@ -95,24 +88,16 @@ export function ImageUpload({ onSubmit }: ImageUploadProps) {
       );
 
       // Upload to Cloudinary
-      const formData = new FormData();
-      formData.append("file", compressedFile);
-      formData.append("upload_preset", "onboarding_images");
+      const { imageUrl, error } = await uploadImage(compressedFile);
 
-      const uploadResponse = await fetch(
-        "https://api.cloudinary.com/v1_1/your-cloud-name/image/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      if (!uploadResponse.ok) {
-        throw new Error("Failed to upload image");
+      if (error) {
+        setError("Failed to capture or upload image");
+        return;
       }
 
-      const data = await uploadResponse.json();
-      setImage(data.secure_url);
+      if (imageUrl) {
+        setImage(imageUrl);
+      }
     } catch (err) {
       console.error("Error capturing/uploading image:", err);
       setError("Failed to capture or upload image. Please try again.");
@@ -223,7 +208,7 @@ export function ImageUpload({ onSubmit }: ImageUploadProps) {
                 {image ? (
                   <div className="relative h-40 w-40 overflow-hidden rounded-full">
                     <img
-                      src={image || "/placeholder.svg"}
+                      src={image || "/placeholder-image.jpg"}
                       alt="Captured profile"
                       className="h-full w-full object-cover"
                     />
