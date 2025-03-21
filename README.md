@@ -1,36 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Face Recognition Attendance System - Frontend
 
-## Getting Started
+This is the frontend of the Face Recognition Attendance System built using **Next.js**. It allows users to register, track, and view their attendance using face recognition integrated with a backend system.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **User Registration**: Admins can register users with their name, email, and unique user ID (employee/student ID).
+- **Face Recognition**: Users can upload or take a photo for face recognition.
+- **Attendance Tracking**: Attendance is automatically recorded once per day via face recognition.
+- **Attendance Sheet**: Admins can view and download attendance sheets for each day as Excel files.
+- **Attendance Performance**: Logged-in users can view their attendance performance and details for a selected period.
+- **User Dashboard**: Displays the list of present users for the selected day.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Frontend**: Next.js, React
+- **Styling**: TailwindCSS (or other UI frameworks like Material UI)
+- **API Communication**: Axios or Fetch for making requests to the backend
+- **Authentication**: JWT or cookie-based authentication (depending on the backend setup)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Installation
 
-## Learn More
+### Prerequisites
 
-To learn more about Next.js, take a look at the following resources:
+Ensure you have the following installed:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Node.js](https://nodejs.org/) (LTS version)
+- [Yarn](https://classic.yarnpkg.com/en/docs/install) (optional but recommended)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Steps to Setup
 
-## Deploy on Vercel
+1. Clone the repository:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   git clone https://github.com/wyasyn/research-project-frontend.git
+   cd research-project-frontend
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. Install dependencies:
+
+   ```bash
+   yarn install
+   # or
+   npm install
+   ```
+
+3. Create a `.env.local` file in the root directory and add the following environment variables:
+
+   ```bash
+   NEXT_PUBLIC_API_URL=http://localhost:5000 # URL to your backend API
+   NEXT_PUBLIC_FACE_RECOGNITION_API=http://localhost:5000/recognize # URL to your face recognition endpoint
+   ```
+
+   Replace `http://localhost:5000` with the actual URL of your backend.
+
+4. Run the development server:
+
+   ```bash
+   yarn dev
+   # or
+   npm run dev
+   ```
+
+   The application will be available at [http://localhost:3000](http://localhost:3000).
+
+## Pages and Components
+
+### `/pages/index.js`
+
+- The homepage where users can log in or sign up.
+
+### `/pages/register.js`
+
+- A page where admins can register new users.
+
+### `/pages/attendance.js`
+
+- A page that displays the attendance sheet for a selected day and allows users to view their attendance history.
+
+### `/pages/dashboard.js`
+
+- A page where logged-in users can see their attendance performance.
+
+### `/pages/face-recognition.js`
+
+- A page where users can upload or take a photo for face recognition. This will trigger the backend API to process the image and record attendance.
+
+## API Integration
+
+The frontend communicates with the backend using the following endpoints:
+
+- **User Registration**: `POST /api/register`
+- **Face Recognition**: `POST /api/recognize-face`
+- **Get Attendance**: `GET /api/attendance/{date}`
+- **Get All Attendance Sheets**: `GET /api/attendance-sheets`
+- **Download Attendance Sheet**: `GET /api/attendance-sheets/{date}/download`
+
+Refer to the backend documentation for more details on each API endpoint.
+
+## Authentication
+
+Ensure that the backend is set up with the proper authentication (JWT, session cookies) to protect routes that require a logged-in user. The frontend sends the authentication token (if applicable) in the `Authorization` header with each request.
+
+## Troubleshooting
+
+- **Cannot connect to the backend**: Ensure your backend is running and accessible at the URL specified in the `.env.local` file.
+- **Face recognition not working**: Check if the correct image is being sent to the backend. Ensure that the backend is set up to process the image properly.
+
+## Contributing
+
+Feel free to fork the repository and create a pull request for any improvements or bug fixes.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
