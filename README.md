@@ -16,7 +16,7 @@ This is the frontend of the Face Recognition Attendance System built using **Nex
 - **Frontend**: Next.js, React
 - **Styling**: TailwindCSS
 - **API Communication**: Fetch for making requests to the backend
-- **Authentication**: JWT or cookie-based authentication
+- **Authentication**: JWT and cookie-based authentication
 
 ## Installation
 
